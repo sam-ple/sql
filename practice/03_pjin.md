@@ -124,6 +124,60 @@ GROUP BY p.id, p.name, p.position, p.club
 ORDER BY ゴール数 DESC
 ```
 
+<!--
+###
+
+>
+
+``` sql
+
+```
+-->
+
+### 66
+
+> 各ポジションごと（GK、FWなど）に最も身長と、その選手名、所属クラブを表示してください。ただし、FROM句に副問合せを使用してください。
+
+``` sql
+SELECT p1.position, p1.最大身長, p2.name, p2.club
+FROM (
+    SELECT position, MAX(height) AS 最大身長
+    FROM players
+    GROUP BY position
+    ) p1
+LEFT JOIN players p2 ON p1.最大身長 = p2.height AND p1.position = p2.position
+```
+
+SQLを覚えたばかりの方がよくしてしまうのが以下のような間違いです。
+
+``` sql
+SELECT position, MAX(height) AS 最大身長, name, club
+FROM players
+GROUP BY position
+```
+
+これは、「グループ化しているとき（GROUP BY句を記述しているとき）は、SELECT句にはグループ関数を用いた列かGROUP BY句で指定した列しか記述できない」というルールに反してしまっています。  
+（SELECT句にname、clubがあるのが誤りです。）  
+MySQLではこのような誤ったSQLもエラーにならず実行できてしまいますが、構文間違いとなりますので注意しましょう。
+
+### 67
+
+> 各ポジションごと（GK、FWなど）に最も身長と、その選手名を表示してください。ただし、SELECT句に副問合せを使用してください。
+
+``` sql
+SELECT p1.position, MAX(p1.height) AS 最大身長, 
+    (
+    SELECT p2.name
+    FROM players p2
+    WHERE MAX(p1.height) = p2.height AND p1.position = p2.position
+    ) AS 名前
+FROM players p1
+GROUP BY p1.position
+```
+
+問題66で使用した副問合せを、FROM句ではなくSLECT句に使用するパターンです。このパターンで注意しなくてはならないのは、playersテーブル内のデータ構造です。今回使用しているサンプルデータでは問題なく実行することが可能ですが、仮に同じポジションで同じ最大身長の選手が2名以上いる場合には、実行するとエラーとなってしまいます。  
+SELECT句に副問合せを記述する場合には、その副問合せでは1件しかデータを返さないようにしないといけません。複数件のデータが返るようなデータ構造ならば、前問のようにFROM句での副問合せを使用しましょう。
+
 ### 68
 
 > 問題：
@@ -134,6 +188,8 @@ SELECT uniform_num, position, name, height
 FROM players
 WHERE height < (SELECT AVG(height) FROM players)
 ```
+
+平均身長を求めるためにはグループ関数AVGを使用する必要があります。この結果を使ってWHERE句に条件を設定することで目的を達成することができます。このようにWHERE句に副問合せを使用する場合には、内側のSELECT句の結果を1行だけ返すようにする必要があります。なお、条件式に<や=ではなく、IN句を用いていれば複数行返すようなSELECT句でも問題ありません。
 
 ### 69
 
@@ -146,6 +202,8 @@ FROM countries
 GROUP BY group_name
 HAVING MAX(ranking) -  MIN(ranking) > 50
 ```
+
+グループ関数（MAXやMIN）の結果をつかって抽出条件を作りたい場合は、WHERE句ではなくHAVING句に記述します。WHERE句に記述するとエラーとなってしまいますので、注意してください。
 
 ### 70
 
@@ -162,6 +220,7 @@ FROM players
 WHERE birth BETWEEN '1981-1-1' AND '1981-12-31'
 ```
 
+日付関数を使用すると同じことが可能かもしれませんが、今回はUNION句を使用してみました。UNION句を使うと、2つのSELECTの結果を行方向（縦）につなげることができます。注意点としては、2つのSELECT句は同じ列数を返す必要があることです。それほど使用頻度の多いものではありません。
 
 ### 71
 
@@ -179,14 +238,7 @@ WHERE weight > 95
 ORDER BY id
 ```
 
-<!--
-###
-
->
-
-``` sql
-
-```
--->
-
+たとえば、フォースター選手が2件分抽出されています。  
+「どちらの条件にも合致する場合には2件分のデータとして抽出」という指示があるため、WHERE句で条件を設定する方法ではうまく抽出することができません。そこでUNION句を使用するのですが、前問のようにUNION ALL句ではなくUNION句を使用してしまうと、相変わらず2件として抽出することができません。これは、UNION句では同じ行は自動的にマージ（2行が1行にまとまってしまう）されてしまうためです。同じ行があったとしてもマージせず2件分として抽出したい場合にはUNION ALL句を使います。  
+注意事項としては、UNION句と同じように2つのSELECTの列数を同じにしておく必要があります。
 
