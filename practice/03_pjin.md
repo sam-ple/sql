@@ -8,11 +8,8 @@ SELECT
 FROM
  countries
 # goals
-# goals_tmp
 # pairings
-# pairings_tmp
 # players
-# players_tmp
 LIMIT
  3
 ```
@@ -34,14 +31,6 @@ LIMIT
 |2|122|8|前半7分|
 |3|113|10|前半18分|
 
-#### goals_tmp
-
-|my_country|enemy_country|goal_time|player_name|
-|:----|:----|:----|:----|
-|クロアチア|ブラジル|前半11分| |
-|ブラジル|クロアチア|前半29分|ネイマール|
-|ブラジル|クロアチア|後半26分|ネイマール|
-
 #### pairings
 
 |id|kickoff|my_country_id|enemy_country_id|
@@ -50,14 +39,6 @@ LIMIT
 |2|2014-06-14 01:00:00|2|3|
 |3|2014-06-14 04:00:00|5|6|
 
-#### pairings_tmp
-
-|kickoff|my_country|enemy_country|
-|:----|:----|:----|
-|2014-06-13 05:00:00|ブラジル|クロアチア|
-|2014-06-14 01:00:00|メキシコ|カメルーン|
-|2014-06-14 04:00:00|スペイン|オランダ|
-
 #### players
 
 |id|country_id|uniform_num|position|name|club|birth|height|weight|
@@ -65,14 +46,6 @@ LIMIT
 |1|1|12|GK|ジュリオセザール|トロント（カナダ）|1979-09-03|186|79|
 |2|1|1|GK|ジェフェルソン|ボタフォゴ（ブラジル）|1983-01-02|188|80|
 |3|1|22|GK|ビクトル|アトレチコ・ミネイロ（ブラジル）|1983-01-21|193|84|
-
-#### players_tmp
-
-|country|uniform_num|position|name|club|birth|height|weight|
-|:----|:----|:----|:----|:----|:----|:----|:----|
-|ブラジル|12|GK|ジュリオセザール|トロント（カナダ）|1979-09-03|186|79|
-|ブラジル|1|GK|ジェフェルソン|ボタフォゴ（ブラジル）|1983-01-02|188|80|
-|ブラジル|22|GK|ビクトル|アトレチコ・ミネイロ（ブラジル）|1983-01-21|193|84|
 
 
 ### 01
@@ -149,6 +122,61 @@ FROM players p
 LEFT JOIN goals g ON g.player_id = p.id
 GROUP BY p.id, p.name, p.position, p.club
 ORDER BY ゴール数 DESC
+```
+
+### 68
+
+> 問題：
+全選手の平均身長より低い選手をすべて抽出してください。表示する列は、背番号、ポジション、名前、身長としてください。
+
+``` sql
+SELECT uniform_num, position, name, height
+FROM players
+WHERE height < (SELECT AVG(height) FROM players)
+```
+
+### 69
+
+> 問題：
+各グループの最上位と最下位を表示し、その差が50より大きいグループを抽出してください。
+
+``` sql
+SELECT group_name, MAX(ranking), MIN(ranking)
+FROM countries
+GROUP BY group_name
+HAVING MAX(ranking) -  MIN(ranking) > 50
+```
+
+### 70
+
+> 問題：
+1980年生まれと、1981年生まれの選手が何人いるか調べてください。ただし、日付関数は使用せず、UNION句を使用してください。
+
+``` sql
+SELECT '1980' AS '誕生年', COUNT(id)
+FROM players
+WHERE birth BETWEEN '1980-1-1' AND '1980-12-31'
+UNION
+SELECT '1981', COUNT(id)
+FROM players
+WHERE birth BETWEEN '1981-1-1' AND '1981-12-31'
+```
+
+
+### 71
+
+> 問題：
+身長が195㎝より大きいか、体重が95kgより大きい選手を抽出してください。ただし、どちらの条件にも合致する場合には2件分のデータとして抽出してください。また、結果はidの昇順としてください。
+
+``` sql
+SELECT id, position, name, height, weight
+FROM players
+WHERE height > 195
+UNION ALL
+SELECT id, position, name, height, weight
+FROM players
+WHERE weight > 95
+ORDER BY id
 ```
 
 <!--

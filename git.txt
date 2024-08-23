@@ -4,7 +4,6 @@ git init
 git remote add origin https://github.com/{ユーザー名}/{リポジトリ名}.git
 git remote -v
 git branch -M main
-git push -u origin main
 ―――――――――――
 git switch -c dev
 git push -u origin dev
