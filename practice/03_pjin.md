@@ -204,10 +204,113 @@ ORDER BY age DESC;
 MySQLの場合には日付計算用の関数（TIMESTAMPDIFF）を使用することで簡単に求めることができます。  
 Oracleなどの他のRDBMSでは、このような関数がない場合もあるようです。
 
+* * *
+
+### 10
+
+> 問題：オウンゴールの回数を表示する。（オウンゴールはgoalsテーブルのplayer_id列がNULLのものになります）
+
+``` sql
+SELECT COUNT(g.goal_time)
+FROM goals  g
+WHERE g.player_id IS NULL;
+```
+
+* * *
+
+### 11
+
+> 問題：各グループごとの総得点数を表示して下さい。BETWEEN演算子を使用して下さい。グループリーグの対戦は2014-6-13から2014-6-27までに行われていました。
+
+``` sql
+SELECT c.group_name, COUNT(g.id)
+FROM goals g
+LEFT JOIN pairings p ON p.id = g.pairing_id
+LEFT JOIN countries c ON p.my_country_id = c.id 
+WHERE p.kickoff BETWEEN '2014-06-13 0:00:00' AND '2014-06-27 23:59:59'
+GROUP BY c.group_name
+```
+
+各国がどのグループに所属しているかは、countriesテーブルに格納されています。  
+つまり、goalsテーブル、pairingsテーブル、countriesテーブルをJOINする必要があります。  
+  
+グループリーグの期間は問題文の通りですので、これを条件にすることでグループリーグ中の総得点を出力することができます。  
+6月28日以降のgoalデータに関しては、決勝リーグのものになりますので省く必要があるわけですね。  
+  
+また、実際に実行していただければすぐにわかりますが、以下の条件では6月27日のデータが抽出されません。  
+WHERE p.kickoff BETWEEN ‘2014-06-13’ AND ‘2014-06-27’
+  
+回答例のように「23:59:59」のように時間も条件に入れておく必要があります。
+
+* * *
+
+### 12
+
+> 問題：日本VSコロンビア戦（pairings.id = 103）でのコロンビアの得点のゴール時間を表示してください
+
+``` sql
+SELECT goal_time
+FROM goals
+WHERE pairing_id = 103
+```
+
+* * *
+
+### 13
+
+> 問題：日本VSコロンビア戦の勝敗を表示して下さい。日本のゴール数はpairings.id = 39、コロンビアのゴール数はparings.id = 103です。
+
+``` sql
+SELECT c.name, COUNT(g.goal_time)
+FROM goals g
+LEFT JOIN pairings p ON p.id = g.pairing_id
+LEFT JOIN countries c ON p.my_country_id = c.id 
+WHERE p.id = 103 OR p.id = 39
+GROUP BY c.name
+```
+
+* * *
+
+### 14
+
+> 問題：グループCの各対戦毎にゴール数を表示してください。ゴール数がゼロの場合も表示してください。副問合せは使わずに、外部結合だけを使用して下さい。
+>   
+> 表示するカラム  
+> ・キックオフ日時  
+> ・自国名  
+> ・対戦相手国名  
+> ・自国FIFAランク  
+> ・対戦相手国FIFAランク  
+> ・自国のゴール数  
+>   
+> ソート順  
+> ・キックオフ日時  
+> ・自国FIFAランク  
+
+``` sql
+SELECT p1.kickoff, c1.name AS my_country, c2.name AS enemy_country,
+    c1.ranking AS my_ranking, c2.ranking AS enemy_ranking,
+    COUNT(g1.id) AS my_goals
+FROM pairings p1
+LEFT JOIN countries c1 ON c1.id = p1.my_country_id
+LEFT JOIN countries c2 ON c2.id = p1.enemy_country_id
+LEFT JOIN goals g1 ON p1.id = g1.pairing_id
+WHERE c1.group_name = 'C' AND c2.group_name = 'C'
+GROUP BY p1.kickoff, c1.name, c2.name, c1.ranking, c2.ranking
+ORDER BY p1.kickoff, c1.ranking
+```
+
+「ゴール数がゼロの場合も表示」ということですので、メインテーブルとなるのはpairingsテーブルとします。  
+表示するカラムはこのpairingsテーブルとcountriesテーブルを結合（2つ）、goalsテーブルすれば全て表示することが可能です。  
+間違いやすいポイントとしては、以下が挙げられます。  
+・GROUP BY句にSELECT句で指定したカラムを全て列挙する  
+・my_goalsはgoalsテーブルのPKをカウントする  
+・決勝リーグの結果が含まれないように自国と対戦国がどちらもCグループという条件を付ける
+
 <!--
 * * *
 
-###
+### 
 
 > 
 
