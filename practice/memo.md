@@ -43,4 +43,4 @@ https://oraclesqlpuzzle.ninja-web.net/
 
 SQL演習問題 | なろう講習会
 https://traptitech.github.io/naro-text/chapter1/section4/2_sql_exercise.html
-
+https://maru-note.net/entry/2022/12/12/214807
