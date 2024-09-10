@@ -40,3 +40,7 @@ https://qiita.com/devopsCoordinator/items/9b70e506150888e190be
 
 OracleSQLパズル
 https://oraclesqlpuzzle.ninja-web.net/
+
+SQL演習問題 | なろう講習会
+https://traptitech.github.io/naro-text/chapter1/section4/2_sql_exercise.html
+

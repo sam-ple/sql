@@ -12,7 +12,7 @@ WHERE
 
 ``` sql
 SELECT
-	M01.partner_type  AS 'パートナー区分' -- 1:得意先　2:仕入先（生産委託先）
+	 M01.partner_type  AS 'パートナー区分' -- 1:得意先　2:仕入先（生産委託先）
 	,M01.campus_id     AS 'CAMPUS-ID'
 	,M01.company_name  AS '会社名'     
 	,M01.company_name2 AS '会社名略称'
@@ -35,7 +35,7 @@ WHERE
 
 ``` sql
 SELECT
-    F01.inquiry_no AS '引合番号'
+     F01.inquiry_no AS '引合番号'
     ,F01.product_code AS '分類記号'
     ,F01.branch_no AS '枝番'
     ,F01.inquiry_no + F01.product_code AS 'まとめ製番'
@@ -108,11 +108,11 @@ SELECT
 FROM
     f_product_no AS F01 -- 製番管理ファイル(製番の進捗や詳細を管理する)
 WHERE
-    F01.order_date >= 2024/08/01
---    AND
---    F01.order_date <= 2024/08/31
---    AND
---    F01.shipment_plan_date IS NULL
+    F01.order_date >= '2024/08/01'
+    AND
+    F01.order_date <= '2024/08/31'
+    AND
+    F01.shipment_plan_date IS NULL
 ORDER BY
     F01.order_date DESC
 -- LIMIT 3
@@ -159,3 +159,112 @@ FROM
     f_product_no AS F01
 ```
 
+### 売上一覧
+
+``` sql
+SELECT
+	 T20.sales_no AS '売上番号'
+	,T20.inquiry_no AS '引合番号'
+	,T20.product_code AS '分類記号'
+	,T20.branch_no AS '枝番'
+	,T20.order_no AS '受注番号'
+	,T20.split_num AS '分納回数' -- 受注トランの検収明細の回数を更新
+	,T20.subject AS '件名'
+	,T20.campus_id AS 'CAMPUS-ID'
+	,T20.sales_pic_code AS '営業担当者コード'
+	,T20.shipment_pic_code AS '出荷担当者コード'
+	,T20.acceptance_pic_code AS '検収担当者コード'
+	,T20.shipment_date AS '出荷日'
+	,T20.acceptance_date AS '検収日'
+	,T20.withdrawal_plan_date AS '回収予定日'
+	,T20.quantity AS '数量'
+	,T20.uom AS '単位'
+	,T20.unit_price AS '単価'
+	,T20.currency_rate AS 'レート'
+	,T20.currency_code AS '通貨コード'
+	,T20.sales_amount_fc AS '売上額（外貨）'
+	,T20.sales_amount AS '売上額（内貨）'
+	,T20.remarks AS '備考'
+	,T20.tax_type AS '税区分' -- 0:通常 1:非課税　2:軽減税率 
+	,T20.tax_rate AS '税率'
+	,T20.tax_amount AS '税額'
+	,T20.is_ship_approved AS '承認区分（出荷）' -- 0:対象外 1:承認待ち 2：承認 3:否決 
+	,T20.ship_approver_pic_code AS '承認者コード（出荷）'
+	,T20.ship_approved_date AS '承認日（出荷）'
+	,T20.is_sales_approved AS '承認区分（検収）' -- 0:対象外 1:承認待ち 2：承認 3:否決 
+	,T20.sales_approver_pic_code AS '承認者コード（検収）'
+	,T20.sales_approved_date AS '承認日（検収）'
+	,T20.data_output_date AS '連携データ出力日'
+	,T20.interface_no AS '連携連番'
+	,T20.interface_user_id AS '担当者コード' -- 会計連携データ出力を起動した担当者
+	,T20.issued_date AS '発行日'
+	,T20.invoice_no AS '請求書番号'
+	,T20.user_id AS '担当者コード'
+FROM
+	t_sales AS T20 -- 売上トラン(製番明細別の売上のヘッダー情報を管理する)
+```
+
+### 仕入一覧
+
+``` sql
+SELECT
+	 T18.receipt_no AS '受入番号'
+	,T18.inquiry_no AS '引合番号'
+	,T18.product_code AS '分類記号'
+	,T18.branch_no AS '枝番'
+	,T18.po_no AS '発注番号'
+	,T18.po_detail_no AS '発注明細番号'
+	,T18.quotation_reply_no AS '見積回答番号'
+	,T18.reply_due_date AS '見積回答 納期'
+	,T18.reply_unit_price AS '見積回答 単価'
+	,T18.reply_amount AS '見積回答 金額'
+	,T18.parts_list_pattern AS 'パターン' -- 1:引合　2:受注
+	,T18.split_num AS '分納回数' -- 不要と思われるがひとまず保持
+	,T18.campus_id AS 'CAMPUS-ID'
+	,T18.row_no AS '行番号' -- 部品リスト行番号
+	,T18.parts_category_code AS '部品分類コード'
+	,T18.parts_name AS '部品名'
+	,T18.drawing_no AS '図面番号／型式'
+	,T18.surface_process_code AS '表面処理コード'
+	,T18.drawing_pic_code AS '設計担当者コード'
+	,T18.inspection_pic_code AS '検査組立担当者コード'
+	,T18.receipt_pic_code AS '受入担当者コード'
+	,T18.acceptance_pic_code AS '検収担当者コード'
+	,T18.acceptance_type AS '計上区分' -- 1:受入基準 2:検収基準
+	,T18.is_fully_delivered AS '完納区分' -- 0:未納 1:完納
+	,T18.quantity_type AS '数量指定区分' -- 1:検収数　2:不良数
+	,T18.tax_type AS '税区分' -- 0:通常 1:非課税　2:軽減税率
+	,T18.tax_rate AS '税率'
+	,T18.receipt_date AS '受入日'
+	,T18.acceptance_date AS '検収日'
+	,T18.receipt_quantity AS '受入数量'
+	,T18.defective_quantity AS '不良数'
+	,T18.acceptance_quantity AS '検収数量'
+	,T18.uom AS '単位'
+	,T18.unit_price AS '単価'
+	,T18.tax_amount AS '消費税額'
+	,T18.amount AS '金額'
+	,T18.campus_usage_amount AS 'CAMPUS利用料'
+	,T18.campus_usage_tax_amount AS 'CAMPUS利用料税額'
+	,T18.payment_plan_date AS '支払予定日'
+	,T18.remarks AS '備考'
+	,T18.acceptance_report_printed AS '検収書' -- 発行日を更新
+	,T18.campus_usage_printed AS '利用料' -- 〃
+	,T18.acceptance_printed_num AS '検収書発行回数' -- 検収書の発行回数
+	,T18.usage_printed_num AS '利用料発行回数' -- CAMPUS利用料の発行回数
+	,T18.start_plan_date AS '予定' -- 測定チェックシート入力結果
+	,T18.end_plan_date AS '予定' -- 〃
+	,T18.actual_start_date AS '実績' -- 〃
+	,T18.actual_end_date AS '実績' -- 〃
+	,T18.is_approved AS '承認区分' -- 0:対象外 1:承認待ち 2：承認 3:否決 
+	,T18.approver_pic_code AS '承認者コード'
+	,T18.approved_date AS '承認日'
+	,T18.data_output_date AS '連携データ出力日' -- 仕入連携データ出力日
+	,T18.interface_no AS '連携連番' -- 連携データ連番
+	,T18.user_id AS '担当者コード' -- 会計連携データ出力を起動した担当者
+	,T18.usage_data_output_date AS '利用料連携データ出力日' -- 利用料連携データ出力日
+	,T18.usage_interface_no AS '利用料連携連番' -- 連携データ連番
+	,T18.usage_user_id AS '利用料担当者コード' -- 会計連携データ出力を起動した担当者
+FROM
+	t_receipt AS T18 -- 仕入トラン(受入・検収実績を管理する)
+```

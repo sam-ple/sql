@@ -75,7 +75,7 @@
 
 ``` sql
 SELECT
-	M01.partner_type AS 'パートナー区分' -- 1:得意先　2:仕入先（生産委託先）
+	 M01.partner_type AS 'パートナー区分' -- 1:得意先　2:仕入先（生産委託先）
 	,M01.campus_id AS 'CAMPUS-ID'
 	,M01.company_name AS '会社名'
 	,M01.company_name2 AS '会社名略称'
@@ -116,7 +116,7 @@ FROM
 
 ``` sql
 SELECT
-	M03.user_id AS '担当者コード'
+	 M03.user_id AS '担当者コード'
 	,M03.user_name AS '担当者名'
 	,M03.user_name_alt AS '担当者名（外国語）'
 	,M03.department_code AS '所属部門コード' -- コード管理（DEPARTMENT_CODE)
@@ -146,7 +146,7 @@ FROM
 
 ``` sql
 SELECT
-	T18.receipt_no AS '受入番号'
+	 T18.receipt_no AS '受入番号'
 	,T18.inquiry_no AS '引合番号'
 	,T18.product_code AS '分類記号'
 	,T18.branch_no AS '枝番'
@@ -220,7 +220,7 @@ FROM
 
 ``` sql
 SELECT
-	T20.sales_no AS '売上番号'
+	 T20.sales_no AS '売上番号'
 	,T20.inquiry_no AS '引合番号'
 	,T20.product_code AS '分類記号'
 	,T20.branch_no AS '枝番'
@@ -274,7 +274,7 @@ FROM
 
 ``` sql
 SELECT
-	F01.inquiry_no AS '引合番号'
+	 F01.inquiry_no AS '引合番号'
 	,F01.product_code AS '分類記号'
 	,F01.branch_no AS '枝番'
 	,F01.campus_id AS 'CAMPUS-ID'
