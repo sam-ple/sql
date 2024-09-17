@@ -53,11 +53,12 @@ FROM
 
 ``` sql
 SELECT
-      F01.inquiry_no AS '引合番号'
-    , F01.product_code AS '分類記号'
-    , F01.branch_no AS '枝番'
-    , F01.inquiry_no + F01.product_code AS 'まとめ製番'
-    , F01.inquiry_no + F01.product_code + F01.branch_no AS '製番'
+      ROW_NUMBER() OVER(ORDER BY inquiry_no ASC) AS '項番'
+    , F01.inquiry_no AS '引合番号'
+    , F01.product_code AS '区分記号'
+    , F01.branch_no AS '枝番号'
+    , F01.inquiry_no + F01.product_code AS 'まとめ番号'
+    , F01.inquiry_no + F01.product_code + F01.branch_no AS '製造番号'
     , F01.campus_id AS 'CAMPUS-ID'
     , (SELECT M01_01.company_name FROM m_partner AS M01_01 WHERE F01.campus_id = M01_01.campus_id) AS '会社名'
     , (SELECT M01_02.company_name2 FROM m_partner AS M01_02 WHERE F01.campus_id = M01_02.campus_id) AS '会社略名'
@@ -134,7 +135,7 @@ FROM
 ORDER BY
 --    F01.order_date DESC -- 受注日
     F01.due_date DESC -- 納期
--- LIMIT 3
+--LIMIT 3
 ;
 ```
 
@@ -152,7 +153,7 @@ FROM
 SELECT
       T20.sales_no AS '売上番号'
     , T20.inquiry_no AS '引合番号'
-    , T20.product_code AS '分類記号'
+    , T20.product_code AS '区分記号'
     , T20.branch_no AS '枝番'
     , T20.order_no AS '受注番号'
     , T20.split_num AS '分納回数' -- 受注トランの検収明細の回数を更新
@@ -229,7 +230,7 @@ FROM
 SELECT
       T18.receipt_no AS '受入番号'
     , T18.inquiry_no AS '引合番号'
-    , T18.product_code AS '分類記号'
+    , T18.product_code AS '区分記号'
     , T18.branch_no AS '枝番'
     , T18.po_no AS '発注番号'
     , T18.po_detail_no AS '発注明細番号'
@@ -327,4 +328,32 @@ FROM
 ;
 ```
 
+### 担当者一覧
 
+``` sql
+SELECT
+      M03.user_id AS '担当者コード'
+    , M03.user_name AS '担当者名'
+    , M03.user_name_alt AS '担当者名（外国語）'
+    , M03.department_code AS '所属部門コード' -- コード管理（DEPARTMENT_CODE)
+    , M03.email AS 'E-mail'
+    , M03.password AS 'パスワード'
+    , M03.role_group_id AS 'ロールグループID' -- メニューの割り当て
+    , M03.menu_id AS 'メニューID'
+    , M03.password_change_date AS 'パスワード変更日' -- yyyy/mm/dd
+    , M03.is_retired AS '在職区分' -- 0:退職　1:在職
+    , M03.supervisor_pic_code AS '上長担当者コード' -- 承認依頼先の担当者コード
+    , M03.is_approver AS '承認者区分' -- 0:非承認者 1:承認者
+    , M03.authority_type AS '権限区分' -- 0:運用者　1:管理者
+    , M03.created_at AS '作成日'
+    , M03.created_by AS '作成者コード'
+    , M03.created_pid AS '作成プログラムID'
+    , M03.updated_at AS '更新日'
+    , M03.updated_by AS '更新者コード'
+    , M03.updated_pid AS '更新プログラムID'
+    , M03.deleted_at AS '削除日'
+    , M03.deleted_by AS '削除者コード'
+    , M03.deleted_pid AS '削除プログラムID'
+FROM
+    m_employee AS M03 -- 担当者マスタ(社内担当者を管理するマスタ)
+```
