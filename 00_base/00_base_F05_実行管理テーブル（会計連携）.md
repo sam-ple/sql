@@ -21,4 +21,5 @@ SELECT
     , F05.deleted_pid AS '削除プログラムID'
 FROM
     f_account_if AS F05
+;
 ```
