@@ -19,6 +19,8 @@ SELECT
     , M01.campus_id     AS 'CAMPUS-ID'
     , M01.company_name  AS '会社名'
     , M01.company_name2 AS '会社名略称'
+    , M01.language_code AS '基軸言語コード' -- コード管理(LANUGAGE_CODE)
+    , M01.currency_code AS '基軸通貨コード' -- レートマスタにてコードを管理
     , M01.closing_date  AS '締日'    -- DD形式
     , M01.payment_site  AS 'サイト'    -- 1:翌月　2:翌々月
     , CASE M01.payment_site
