@@ -83,15 +83,5 @@ SELECT
     , F01.sales_amount_fc AS '売上金額(外貨)'
 FROM
     f_product_no AS F01 -- 製番管理ファイル(製番の進捗や詳細を管理する)
---WHERE
---     F01.order_date >= '2024/08/01'
---     AND
---     F01.order_date <= '2024/08/31'
---     AND
---     F01.shipment_plan_date IS NULL
-ORDER BY
---    F01.order_date DESC -- 受注日
-    F01.due_date DESC -- 納期
---LIMIT 3
 ;
 ```

@@ -1,17 +1,10 @@
 ### 売上一覧
 
-``` sql
-SELECT
-    *
-FROM
-    t_sales
-;
-```
 
 ``` sql
 SELECT
-      T20.sales_no                AS '売上番号'
-    , T20.inquiry_no              AS '引合番号'
+      T20.sales_no                     AS '売上番号'
+    , T20.inquiry_no                   AS '引合番号'
     , T20.product_code            AS '区分記号'
     , T20.branch_no               AS '枝番'
     , T20.order_no                AS '受注番号'
