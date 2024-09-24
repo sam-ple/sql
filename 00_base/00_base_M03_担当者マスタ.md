@@ -20,7 +20,7 @@ SELECT
     , M03.supervisor_pic_code     AS '上長担当者コード' -- 承認依頼先の担当者コード
     , (SELECT M03_01.user_name FROM m_employee AS M03_01 WHERE M03.supervisor_pic_code = M03_01.user_id) AS '上長'
     , M03.is_approver             AS '承認者区分' -- 0:非承認者 1:承認者
-    , CASE M03.is_approved
+    , CASE M03.is_approver
         WHEN 0 THEN '非承認者'
         WHEN 1 THEN '承認者'
         ELSE ''
