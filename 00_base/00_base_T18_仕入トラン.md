@@ -21,9 +21,14 @@ SELECT
     , T18.reply_unit_price             AS '見積回答 単価'
     , T18.reply_amount                 AS '見積回答 金額'
     , T18.parts_list_pattern           AS 'パターン' -- 1:引合　2:受注
+    , CASE T18.parts_list_pattern
+        WHEN 1 THEN '引合'
+        WHEN 2 THEN '受注'
+        ELSE ''
+      END AS 'パターン'
     , T18.split_num                    AS '分納回数' -- 不要と思われるがひとまず保持
     , T18.campus_id                    AS 'CAMPUS-ID'
-    , (SELECT M01_01.company_name FROM m_partner AS M01_01 WHERE T18.campus_id = M01_01.campus_id) AS '会社名'
+    , (SELECT M01_01.company_name  FROM m_partner AS M01_01 WHERE T18.campus_id = M01_01.campus_id) AS '会社名'
     , (SELECT M01_02.company_name2 FROM m_partner AS M01_02 WHERE T18.campus_id = M01_02.campus_id) AS '会社略名'
     , T18.row_no                       AS '行番号' -- 部品リスト行番号
     , T18.parts_category_code          AS '部品分類コード'
@@ -39,8 +44,23 @@ SELECT
     , T18.acceptance_pic_code          AS '検収担当者コード'
     , (SELECT M03_04.user_name FROM m_employee AS M03_04 WHERE T18.acceptance_pic_code = M03_04.user_id) AS '検収担当'
     , T18.acceptance_type              AS '計上区分' -- 1:受入基準 2:検収基準
+    , CASE T18.acceptance_type
+        WHEN 1 THEN '受入基準'
+        WHEN 2 THEN '検収基準'
+        ELSE ''
+      END AS '計上区分'
     , T18.is_fully_delivered           AS '完納区分' -- 0:未納 1:完納
+    , CASE T18.is_fully_delivered
+        WHEN 0 THEN '未納'
+        WHEN 1 THEN '完納'
+        ELSE ''
+      END AS '完納区分'
     , T18.quantity_type                AS '数量指定区分' -- 1:検収数　2:不良数
+    , CASE T18.quantity_type
+        WHEN 1 THEN '検収数'
+        WHEN 2 THEN '不良数'
+        ELSE ''
+      END AS '数量指定区分'
     , T18.tax_type                     AS '税区分' -- 0:通常 1:非課税　2:軽減税率
     , CASE T18.tax_type
         WHEN 0 THEN '通常'
@@ -98,6 +118,10 @@ SELECT
     , T18.deleted_at                   AS '削除日'
     , T18.deleted_by                   AS '削除者コード'
     , T18.deleted_pid                  AS '削除プログラムID'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE T18.created_by = M03_90.user_id) AS '作成者'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE T18.updated_by = M03_91.user_id) AS '更新者'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE T18.deleted_by = M03_92.user_id) AS '削除者'
 FROM
     t_receipt AS T18 -- 仕入トラン(受入・検収実績を管理する)
+;
 ```

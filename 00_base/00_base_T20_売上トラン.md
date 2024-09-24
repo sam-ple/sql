@@ -78,6 +78,10 @@ SELECT
     , (SELECT M03_07.user_name FROM m_employee AS M03_07 WHERE T20.user_id = M03_07.user_id) AS '担当者'
     , T20.created_at                   AS '作成日'
     , T20.created_by                   AS '作成者コード'
+    , (SELECT M03_08.user_name FROM m_employee AS M03_08 WHERE T20.created_by = M03_08.user_id) AS '作成者'
+    , T20.created_pid                  AS '作成プログラムID'
+    , T20.updated_at                   AS '更新日'
+    , T20.created_by                   AS '作成者コード'
     , T20.created_pid                  AS '作成プログラムID'
     , T20.updated_at                   AS '更新日'
     , T20.updated_by                   AS '更新者コード'
@@ -85,6 +89,9 @@ SELECT
     , T20.deleted_at                   AS '削除日'
     , T20.deleted_by                   AS '削除者コード'
     , T20.deleted_pid                  AS '削除プログラムID'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE T20.created_by = M03_90.user_id) AS '作成者'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE T20.updated_by = M03_91.user_id) AS '更新者'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE T20.deleted_by = M03_92.user_id) AS '削除者'
 FROM
     t_sales AS T20 -- 売上トラン(製番明細別の売上のヘッダー情報を管理する)
 ;

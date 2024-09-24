@@ -39,19 +39,22 @@ SELECT
     , H06.column_030         AS '項目030'
     , H06.created_at         AS '作成日'
     , H06.created_by         AS '作成者コード'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE T20.created_by = M03_90.user_id) AS '作成者'
     , H06.created_pid        AS '作成プログラムID'
     , H06.updated_at         AS '更新日'
     , H06.updated_by         AS '更新者コード'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE T20.updated_by = M03_91.user_id) AS '更新者'
     , H06.updated_pid        AS '更新プログラムID'
     , H06.deleted_at         AS '削除日'
     , H06.deleted_by         AS '削除者コード'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE T20.deleted_by = M03_92.user_id) AS '削除者'
     , H06.deleted_pid        AS '削除プログラムID'
 FROM
     h_if_data AS H06
 ;
 ```
 
-#### 売上
+#### 売上データ
 
 ``` sql
 SELECT
@@ -114,12 +117,15 @@ SELECT
     , H06.column_017         AS '貸方税区分'
     , H06.created_at         AS '作成日'
     , H06.created_by         AS '作成者コード'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE H06.created_by = M03_90.user_id) AS '作成者'
     , H06.created_pid        AS '作成プログラムID'
     , H06.updated_at         AS '更新日'
     , H06.updated_by         AS '更新者コード'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE H06.updated_by = M03_91.user_id) AS '更新者'
     , H06.updated_pid        AS '更新プログラムID'
     , H06.deleted_at         AS '削除日'
     , H06.deleted_by         AS '削除者コード'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE H06.deleted_by = M03_92.user_id) AS '削除者'
     , H06.deleted_pid        AS '削除プログラムID'
 FROM
     h_if_data AS H06

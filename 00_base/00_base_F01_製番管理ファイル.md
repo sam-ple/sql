@@ -1,5 +1,7 @@
 ### F01：製番管理ファイル
 
+> 製番管理ファイル(製番の進捗や詳細を管理する)
+
 ``` sql
 SELECT
     *
@@ -10,8 +12,8 @@ FROM
 
 ``` sql
 SELECT
-      ROW_NUMBER() OVER(ORDER BY inquiry_no ASC) AS '項番'
-    , F01.inquiry_no                        AS '引合番号'
+--      ROW_NUMBER() OVER(ORDER BY inquiry_no ASC) AS '項番'
+      F01.inquiry_no                        AS '引合番号'
     , F01.product_code                      AS '区分記号'
     , F01.branch_no                         AS '枝番号'
     , F01.inquiry_no + F01.product_code AS 'まとめ番号'
@@ -110,12 +112,15 @@ SELECT
     , F01.sales_amount_fc                   AS '売上金額（外貨）'
     , F01.created_at                        AS '作成日'
     , F01.created_by                        AS '作成者コード'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE F01.created_by = M03_90.user_id) AS '作成者'
     , F01.created_pid                       AS '作成プログラムID'
     , F01.updated_at                        AS '更新日'
     , F01.updated_by                        AS '更新者コード'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE F01.updated_by = M03_91.user_id) AS '更新者'
     , F01.updated_pid                       AS '更新プログラムID'
     , F01.deleted_at                        AS '削除日'
     , F01.deleted_by                        AS '削除者コード'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE F01.deleted_by = M03_92.user_id) AS '削除者'
     , F01.deleted_pid                       AS '削除プログラムID'
 FROM
     f_product_no AS F01 -- 製番管理ファイル(製番の進捗や詳細を管理する)
@@ -125,9 +130,9 @@ FROM
 --     F01.order_date <= '2024/08/31'
 --     AND
 --     F01.shipment_plan_date IS NULL
-ORDER BY
+--ORDER BY
 --    F01.order_date DESC -- 受注日
-    F01.due_date DESC -- 納期
+--    F01.due_date DESC -- 納期
 ;
 ```
 
