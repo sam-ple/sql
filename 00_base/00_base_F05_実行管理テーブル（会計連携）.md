@@ -15,6 +15,7 @@ SELECT
       F05.seq_no             AS '連番'
     , F05.interfaced_date    AS '連携日付'
     , F05.user_id            AS '担当者コード'
+    , (SELECT M03_01.user_name FROM m_employee AS M03_01 WHERE F05.user_id = M03_01.user_id) AS '担当者'
     , F05.start_date         AS '開始日'
     , F05.end_date           AS '終了日'
     , F05.receipt            AS '仕入'
@@ -22,12 +23,15 @@ SELECT
     , F05.sales              AS '売上'
     , F05.created_at         AS '作成日'
     , F05.created_by         AS '作成者コード'
+    , (SELECT M03_90.user_name FROM m_employee AS M03_90 WHERE F05.created_by = M03_90.user_id) AS '作成者'
     , F05.created_pid        AS '作成プログラムID'
     , F05.updated_at         AS '更新日'
     , F05.updated_by         AS '更新者コード'
+    , (SELECT M03_91.user_name FROM m_employee AS M03_91 WHERE F05.updated_by = M03_91.user_id) AS '更新者'
     , F05.updated_pid        AS '更新プログラムID'
     , F05.deleted_at         AS '削除日'
     , F05.deleted_by         AS '削除者コード'
+    , (SELECT M03_92.user_name FROM m_employee AS M03_92 WHERE F05.deleted_by = M03_92.user_id) AS '削除者'
     , F05.deleted_pid        AS '削除プログラムID'
 FROM
     f_account_if AS F05
