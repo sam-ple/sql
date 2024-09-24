@@ -2,14 +2,53 @@
 
 ``` sql
 SELECT
-      F01.inquiry_no                        AS '引合番号'
-    , F01.product_code                      AS '分類記号'
-    , F01.branch_no                         AS '枝番'
+    *
+FROM
+    f_product_no
+;
+```
+
+``` sql
+SELECT
+      ROW_NUMBER() OVER(ORDER BY inquiry_no ASC) AS '項番'
+    , F01.inquiry_no                        AS '引合番号'
+    , F01.product_code                      AS '区分記号'
+    , F01.branch_no                         AS '枝番号'
+    , F01.inquiry_no + F01.product_code AS 'まとめ番号'
+    , F01.inquiry_no + F01.product_code + F01.branch_no AS '製造番号'
     , F01.campus_id                         AS 'CAMPUS-ID'
+    , (SELECT M01_01.company_name FROM m_partner AS M01_01 WHERE F01.campus_id = M01_01.campus_id) AS '会社名'
+    , (SELECT M01_02.company_name2 FROM m_partner AS M01_02 WHERE F01.campus_id = M01_02.campus_id) AS '会社略名'
     , F01.subject                           AS '件名'
     , F01.variety_code                      AS '品種コード'
     , F01.item_name                         AS '品名'
     , F01.status_code                       AS 'ステータス'
+    , CASE F01.status_code
+        WHEN  10 THEN '引合'
+        WHEN  20 THEN '提案'
+        WHEN  30 THEN '部品リスト（仮）'
+        WHEN  40 THEN '見積依頼（概算）'
+        WHEN  50 THEN '見積回答（概算）'
+        WHEN  60 THEN '見積'
+        WHEN  70 THEN '受注'
+        WHEN  80 THEN '出図'
+        WHEN  90 THEN '部品リスト（本）'
+        WHEN 100 THEN '工程設計（調達）'
+        WHEN 200 THEN '見積依頼（本）'
+        WHEN 210 THEN '見積回答（本）'
+        WHEN 220 THEN '発注'
+        WHEN 230 THEN '工程設計（製造）'
+        WHEN 300 THEN '受入'
+        WHEN 310 THEN '不具合管理'
+        WHEN 400 THEN '仕入'
+        WHEN 410 THEN '仕入連携'
+        WHEN 420 THEN '出荷'
+        WHEN 430 THEN '売上'
+        WHEN 440 THEN '売上連携'
+        WHEN 900 THEN '失注'
+        WHEN 910 THEN 'キャンセル'
+        ELSE ''
+      END AS 'ステータス'
     , F01.quotation_issued_date             AS '見積提出日'
     , F01.suggested_date                    AS '提案日'
     , F01.order_accuracy                    AS '受注確度'
@@ -18,13 +57,20 @@ SELECT
     , F01.drawing_inspection_date           AS '検図日'
     , F01.cost_estimate_document_plan_date  AS '原価資料作成予定日'
     , F01.cost_estimate_document_date       AS '原価資料作成日'
-    , F01.sales_pic_code                    AS '営業担当者コード' -- 受注入力より更新
-    , F01.procure_pic_code                  AS '調達担当者コード' -- 受注入力より更新
-    , F01.main_drawing_pic_code             AS '設計担当者コード（主）' -- 設計情報入力より更新
-    , F01.sub_drawing_pic_code              AS '設計担当者コード（従）' -- 設計情報入力より更新
-    , F01.drawing_inspection_pic_code       AS '検図担当者コード' -- 設計情報入力より更新
-    , F01.cost_estimate_pic_code            AS '原価資料担当者コード' -- 設計情報入力より更新
-    , F01.inspection_pic_code               AS '検査組立担当者コード' -- 測定チェックシート入力の検査担当者
+    , F01.sales_pic_code                    AS '営業担当者コード'
+    , (SELECT M03_01.user_name FROM m_employee AS M03_01 WHERE F01.sales_pic_code = M03_01.user_id) AS '営業担当'
+    , F01.procure_pic_code                  AS '調達担当者コード'
+    , (SELECT M03_02.user_name FROM m_employee AS M03_02 WHERE F01.procure_pic_code = M03_02.user_id) AS '調達担当'
+    , F01.main_drawing_pic_code             AS '設計担当者コード(主)'
+    , (SELECT M03_03.user_name FROM m_employee AS M03_03 WHERE F01.main_drawing_pic_code = M03_03.user_id) AS '設計主担当'
+    , F01.sub_drawing_pic_code              AS '設計担当者コード(従)'
+    , (SELECT M03_04.user_name FROM m_employee AS M03_04 WHERE F01.sub_drawing_pic_code = M03_04.user_id) AS '設計従担当'
+    , F01.drawing_inspection_pic_code       AS '検図担当者コード'
+    , (SELECT M03_05.user_name FROM m_employee AS M03_05 WHERE F01.drawing_inspection_pic_code = M03_05.user_id) AS '検図担当'
+    , F01.cost_estimate_pic_code            AS '原価資料担当者コード'
+    , (SELECT M03_06.user_name FROM m_employee AS M03_06 WHERE F01.cost_estimate_pic_code = M03_06.user_id) AS '原価資料担当'
+    , F01.inspection_pic_code               AS '検査組立担当者コード'
+    , (SELECT M03_07.user_name FROM m_employee AS M03_07 WHERE F01.inspection_pic_code = M03_07.user_id) AS '検査担当'
     , F01.order_no                          AS '受注番号'
     , F01.estimate_date                     AS '概算見積日'
     , F01.inquiry_date                      AS '引合日'
