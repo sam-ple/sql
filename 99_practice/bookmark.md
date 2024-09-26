@@ -1,0 +1,42 @@
+- SQL初心者のためのテーブル結合：INNER JOINとOUTER JOINの違い - YouTube
+  - https://www.youtube.com/watch?v=kHROFydu3JA
+- SQLの基本を覚える【初心者向け】
+  - https://qiita.com/chida09/items/d4b33a28b918958f267f
+- 【これだけ覚えてたらOK！】SQL構文まとめ
+  - https://qiita.com/tatsuya4150/items/69c2c9d318e5b93e6ccd
+- 【新人教育資料】SQLへの道 DB編
+  - https://qiita.com/devopsCoordinator/items/9b70e506150888e190be
+- SQL練習問題 | TECH PROjin - Part 8
+  - https://tech.pjin.jp/blog/tag/sql%E7%B7%B4%E7%BF%92%E5%95%8F%E9%A1%8C/page/8/
+- Markdown表変換ツール
+  - https://boost-tool.com/ja/tools/md_table
+- OracleSQLパズル
+  - https://oraclesqlpuzzle.ninja-web.net/
+- SQL演習問題 | なろう講習会
+  - https://traptitech.github.io/naro-text/chapter1/section4/2_sql_exercise.html
+- MySQL公式のサンプルデータベース「world」を取り込んでみました。 - まるノート
+  - https://maru-note.net/entry/2022/12/12/214807
+- ブラウザでSQLを気軽に学ぼう！ #初心者 - Qiita
+  - https://qiita.com/m_nai/items/bfc3968c35fec4aa6117
+- 【SQL腕試し問題！】入会者数と退会者数を日付ごとに集計するSQLを書いてください #SQL - Qiita
+  - https://qiita.com/jnchito/items/1d21fa3970b3c76bee43
+- 【SQL腕試し問題！】入会者数と退会者数を日付ごとに集計するSQLを書いてください #SQL - Qiita
+  - https://qiita.com/jnchito/items/1d21fa3970b3c76bee43
+- 【SQL腕試し問題】現在の部署に所属する社員の一覧を取得するSQLを書いて下さい #SQL - Qiita
+  - https://qiita.com/jnchito/items/29e22cc5a73da29f65a3
+- 【SQL腕試し問題】現在の部署に所属する社員の一覧を取得するSQLを書いて下さい #SQL - Qiita
+  - https://qiita.com/jnchito/items/29e22cc5a73da29f65a3
+- 【SQL腕試し問題！】締め切り日が近いイベントの一覧の取得するSQLを書いて下さい #SQL - Qiita
+  - https://qiita.com/jnchito/items/7d5d7e829690ea3c4d6f
+- 「部屋にいるのは何人？」オリジナルのSQLパズル第一弾｜コグラフ株式会社 データアナリティクス事業部
+  - https://note.com/cograph_data/n/n7ca829760d32
+- 「何日から出社できる？」オリジナルのSQLパズル第二弾｜コグラフ株式会社 データアナリティクス事業部
+  - https://note.com/cograph_data/n/ndee29c63af2a
+- SQLにハマって勉強STOP中。〜応用情報技術者試験｜ノンストップ飯田
+  - https://note.com/nonstop_iida/n/nc10e0ec4d739
+- SQL in the Wizard World | DB Fiddle - SQL Database Playground
+  - https://www.db-fiddle.com/f/9Jq8KfBPtcYRh84PnPUQWi/61
+- Example | DB Fiddle - SQL Database Playground
+  - https://www.db-fiddle.com/f/sWn6RS8GsfRhj5oXwS3Dso/0
+- Sample Database Fiddle | DB Fiddle - SQL Database Playground
+  - https://www.db-fiddle.com/f/o2ohcGVAgHZQg4teg1s9jW/131
