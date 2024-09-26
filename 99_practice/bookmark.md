@@ -40,3 +40,5 @@
   - https://www.db-fiddle.com/f/sWn6RS8GsfRhj5oXwS3Dso/0
 - Sample Database Fiddle | DB Fiddle - SQL Database Playground
   - https://www.db-fiddle.com/f/o2ohcGVAgHZQg4teg1s9jW/131
+- 【SQL】GROUP BYしたときにSELECTできるのは3種類だけやで #MySQL - Qiita
+  - https://qiita.com/Terao-Takumi/items/ddab768281fded632503
